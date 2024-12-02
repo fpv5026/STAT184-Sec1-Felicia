@@ -1,0 +1,166 @@
+---
+title: "Activity #10 : UC Berkeley Dataset"
+format: html
+editor: visual
+author: Manny the Second of Philadelphia 
+---
+
+## Prompt
+
+The year is 1973. UC Berkeley has been sued for sex-based admissions discrimination. Specifically, the plaintiff claims that women are discriminated against in admissions policies. The court has provided admissions data to you and tasked you with answering the question — if a student applies to the school, will their gender play a significant role in their chance of admission?
+
+(We are keeping the analysis limited to this data set)
+
+## Goal
+
+Our goal is determine if gender plays a significant role in a students chance of admission at UC Berkeley in 1973.
+
+## Data Inventory
+
+The first step is to load the admissions data set and the libraries needed for our data visualization.
+
+```{r}
+#load the admissions dataset and additional packages
+url <- "https://waf.cs.illinois.edu/discovery/berkeley.csv"
+data <- read.csv(url)
+
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(knitr)
+```
+
+## Exploratory Data Analysis (EDA)
+
+In order to explore the data set, we are going to use the head() function to show the output of some of the cases, and use the summary() function to assess each attributes distributions.
+
+```{r}
+#EDA
+head(data)
+summary(data)
+```
+
+The first six cases each representing an individual student and the four following attributes: Year, Major, Gender, and Admission. The summary() function shows that for the Year is 1973. The major, gender, and admission show that there are 12763 students represented in this study.
+
+## Admission Rates by Gender
+
+The next step in our analysis is to look at the admission rates by gender. In order to do this, we must a create a table that uses the group_by(Gender) function and summarizes the total number of accepted versus rejected students.
+
+Then, with this information, we can create a bar graph that plots the admission rate by gender. The admissions rate can be calculated by diving the accepted/total number of students per gender.
+
+```{r}
+# Calculate the admission rates by gender
+table(data$Gender, data$Admission)
+
+admission_rates_gender <- data %>%
+  group_by(Gender) %>%
+  summarize(
+    Total = n(),
+    Accepted = sum(Admission == "Accepted"),
+    Admission_Rate = Accepted / Total
+  )
+
+# Plotting the admission rates by gender
+ggplot(admission_rates_gender, aes(x = Gender, y = Admission_Rate)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Admission Rates by Gender", 
+       x = "Gender", 
+       y = "Admission Rate") +
+  theme_minimal()
+
+```
+
+We can continue our analysis by plotting the majors that are associated with the admission rates. To do this, we use the select(Major, Admission) to select the specific columns. Then, we use the group_by(Major) and summarize the admission rate for each major. When we plot, we have the x-axis as major and y-axis as admission rate.
+
+```{r}
+#Admissions rate by major
+admission_rate_major <- data %>%
+  select(Major, Admission) %>%
+  group_by(Major) %>%
+  summarize(
+    Total = n(),
+    Accepted = sum(Admission == "Accepted"),
+    Admission_Rate = Accepted / Total
+  )
+ggplot(admission_rate_major, aes(x = Major, y = Admission_Rate)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Admission Rates by Major", 
+       x = "Major", 
+       y = "Admission Rate") +
+  theme_minimal()
+```
+
+## Applications Received Grouped by Gender and Major
+
+Another plot we can create is to find the gender distribution within each major. In order to do this, we can use the select(Major, Gender) function to select these two specific rows from the data set. Then, we can group_by(Major, Gender) and create a graph that plots the Major on the x-axis, applicants on the y-axis, and have the colors represent the gender. In this case, reddish pink represents female and blue represents male.
+
+```{r}
+#Applications by Gender, Major
+applications_gender_major <- data %>%
+  select(Major, Gender) %>%
+  group_by(Major, Gender) %>%
+  summarize(
+    Total = n()
+  )
+ggplot(applications_gender_major, aes(x = Major, y = Total, fill = Gender)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Total Applications by Major and Gender", 
+       x = "Major", 
+       y = "Applications") +
+  theme_minimal()
+```
+
+## Admission Rates Grouped by Gender and Major
+
+Now, we can add another component to this graph by plotting the admissions rat2es by gender and major. We know from before that we can find the admission rates by dividing the accepted students by the total number of students. Therefore, we can create this graph by using the group_by(Major, Gender) and summarize () to get the total and calculate the admission rates based on this. Then, we can create a bar graph that plots the major on the x-axis, admission rates on the y-axis, and assigns the color of the bar based on the gender.
+
+```{r}
+
+#See admission rates broken down by gender and major
+admission_rates_gender_major <- data %>%
+  group_by(Major, Gender) %>%
+  summarize(
+    Total = n(),
+    Accepted = sum(Admission == "Accepted"),
+    Admission_Rate = Accepted / Total
+  )
+
+head(admission_rates_gender_major)
+
+ggplot(admission_rates_gender_major, aes(x = Major, y = Admission_Rate, fill = Gender)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Admission Rates by Major and Gender", 
+       x = "Major", 
+       y = "Admission Rate") +
+  theme_minimal()
+
+```
+
+## Gender Difference in Admission Rates by Major
+
+Finally, we will generate a graph that determine if gender plays a significant role in a students chances of getting into the college in each major. We can use the select(Major, Gender, Admission_Rate) to select these specific columns in the Admission Rates Grouped by Gender and Major data set. Then, the next important part is to mutate the original table to calculate the difference between the Male and Female admission rates.
+
+When we plot this graph, we need to plot the majors on the x-axis, the difference between male and female on the y-axis, and the colors represents the gender and whose admission rates are higher.
+
+```{r}
+#See the admissions rate gender difference by major
+admission_rate_diff <- admission_rates_gender_major %>%
+  select(Major, Gender, Admission_Rate) %>%
+  pivot_wider(names_from = Gender, values_from = Admission_Rate) %>%
+  mutate(Difference = M - F)
+
+ggplot(admission_rate_diff, aes(x = Major, y = Difference, fill = Difference > 0)) +
+  geom_bar(stat = "identity") +
+  scale_fill_manual(values = c("dark green", "skyblue"), 
+                    labels = c("Female Higher", "Male Higher")) +  # Red for below 0, skyblue for above 0
+  labs(title = "Difference Between Male and Female Admission Rates by Major",
+       x = "Major", 
+       y = "Difference (Male - Female)") +
+  geom_hline(yintercept = 0, linetype = "dotted", color = "black", linewidth = 1) +  # Add horizontal dotted line at y = 0
+  theme_minimal() +
+  theme(legend.title = element_blank())
+```
+
+When looking at the resulting plot, we see that female's have a higher admission rate in major A,B,D, and F (A being the highest with around 10% difference in admission rates). In contrast, males have a higher admission rate in major C, E, and other.
+
+Therefore, we can conclude that gender does plays a significant role in a students chance of admission at UC Berkeley in 1973 depending on what major they are choosing to go into.
