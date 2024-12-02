@@ -1,0 +1,11 @@
+In the main directory on the Github webpage, there are three folders and three files. The two folders are code and data. 
+
+In the code folder in the Github webpage and local repository, there are two folders. One of the .gitkeep commands and the other is a activity 10 qmd file. This folder provides us with code that uses the berkley dataset to answer the question of if a student apples to the school, will their gender okay a significant role in their chance of admission. The file first conducts an exploratory analysis of the Berkeley dataset then dives deeper in graphically comparing and contrasting various variables of the dataset together to answer the given question. 
+
+In the data folder in the Github webpage, there is one file that stores the .gitkeep commands.
+
+In my local repository in my data folder in addition to the ones in the webpage, there is ther Berkley dataset. The Berkley dataset contains four variables: Year, Major, Gender, Admissions. This dataset contains 12,763 cases of individuals who applied to Berkley in 1973. 
+
+The three files in the main directory in Github webpage are .gitattributes, .gitignore, and README.md. Here, when we ignore the Berkley dataset in the data folder, we can see this added to the .gitignore file. 
+
+In all, this directory's purpose is to display the qmd file of the analysis done using the Berkeley dataset to determine if gender plays a significant role in a students chance of admission at UC Berkeley in 1973. 
