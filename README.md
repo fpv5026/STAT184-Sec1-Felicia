@@ -88,3 +88,6 @@ In the end, the final graph plots majors on the x-axis, the difference between m
 When looking at the resulting plot, we see that female's have a higher admission rate in major A,B,D, and F (A being the highest with around 10% difference in admission rates). In contrast, males have a higher admission rate in major C, E, and other.
 
 Therefore, we can conclude that gender does plays a significant role in a students chance of admission at UC Berkeley in 1973 depending on what major they are choosing to go into.
+
+# Contact 
+I hope you enjoyed learning about the Berkeley Dataset with me and discovering whether or not gender does played a significant role in a students chance of admission at UC Berkeley in 1973  Please let me know if you have any further questions. You can contact me at **fpv5026@psu.edu**. Thank you!
