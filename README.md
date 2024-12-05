@@ -81,7 +81,10 @@ admission_rate_diff <- admission_rates_gender_major %>%
 
 In the end, the final graph plots majors on the x-axis, the difference between male and female on the y-axis, and gender and whose admission rates are higher by the colors represented. 
 
+# Does gender plays a significant role in a students chance of admission at UC Berkeley in 1973?
+**Yes!** *Depending on your major*
+<img width="944" alt="image" src="https://github.com/user-attachments/assets/bbf32fd7-3c6e-450e-88af-1ea79d38180e">
 
+When looking at the resulting plot, we see that female's have a higher admission rate in major A,B,D, and F (A being the highest with around 10% difference in admission rates). In contrast, males have a higher admission rate in major C, E, and other.
 
-
-
+Therefore, we can conclude that gender does plays a significant role in a students chance of admission at UC Berkeley in 1973 depending on what major they are choosing to go into.
